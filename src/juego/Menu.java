@@ -39,7 +39,7 @@ public class Menu extends InterfaceJuego {
 		}
 
 	}
-	//Que onda perro
+
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		Menu menu = new Menu();
