@@ -72,14 +72,14 @@ public class Juego extends InterfaceJuego {
 				princesa.setVulnerable(false);
 				vidas--;
 			}
-
+			
 			if (!princesa.siChoca(obstaculos, soldados)){
 				princesa.setVulnerable(true);
 			}
 		
 			bolaFuego.mover(entorno, princesa);
 			bolaFuego.tocaObstaculo(obstaculos);
-		
+			
 			if (bolaFuego.tocaSoldado(soldados)) {
 				puntos += 5;
 			}
@@ -87,7 +87,6 @@ public class Juego extends InterfaceJuego {
 		if (vidas == 0) {
 			mostrarGameOver();
 		}
-		//fin();
 	}
 //	-----------------------------------------------------------------------------------
 	public void mostrarPuntos() {
@@ -105,7 +104,7 @@ public class Juego extends InterfaceJuego {
 	
 	public void mostrarGameOver() {
 		musicaJuego.close();
-		
+	
 		musicaGO.start();
 		fondo.dibujarGO(entorno);
 		fondo.dibujarNombreGO(entorno);
