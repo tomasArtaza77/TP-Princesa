@@ -13,10 +13,10 @@ public class Menu extends InterfaceJuego {
 	Clip musicaMenu;
 	
 	Menu() {
-		app = new Entorno(this, "The Princess and The Lost Cat", 800, 600);
+		app = new Entorno(this, "Super Elizabeth Sis", 800, 600);
 		fondo = new Fondo();
 		nombre = new Fondo();
-		musicaMenu = Herramientas.cargarSonido("musica/WIL.wav");
+		musicaMenu = Herramientas.cargarSonido("musica/musicaM.wav");
 		
 		app.iniciar();
 	}
@@ -25,7 +25,7 @@ public class Menu extends InterfaceJuego {
 	public void tick() {
 		//Muestro la ventana del menu con sus chiches
 		musicaMenu.start();
-		fondo.dibujarMenu(app); 
+		fondo.dibujarMenu(app);
 		fondo.dibujarNombreJuego(app);
 		app.cambiarFont("Arial", 30, Color.WHITE);
 		app.escribirTexto("Press SPACE to play", 250, 470);
@@ -39,7 +39,7 @@ public class Menu extends InterfaceJuego {
 		}
 
 	}
-
+	//Aca empieza
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		Menu menu = new Menu();

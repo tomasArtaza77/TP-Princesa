@@ -2,9 +2,9 @@ package juego;
 
 import java.awt.Color;
 import entorno.Entorno;
-//import entorno.Herramientas;
+import entorno.Herramientas;
 import entorno.InterfaceJuego;
-//import javax.sound.sampled.Clip;
+import javax.sound.sampled.Clip;
 //import java.awt.Color;
 // el nombre del juego es Super Elizabeth Sis
 // CAMBIAR NOMBRES A GETTERS PORQUE QUEDAN FEOS
@@ -17,28 +17,37 @@ public class Juego extends InterfaceJuego {
 	private Obstaculo[] obstaculos;
 	private Soldado[] 	soldados;
 	private Fondo 		fondo;
+
+	Fondo fondoGO;
+	Clip musicaGO;
+	
 	private int 		puntos;
 	private int 		vidas;
-//	Clip musicaJuego;
+	Clip musicaJuego;
 //	-----------------------------------------------------------------------------------
 	public Juego() {
 		this.entorno = new Entorno(this, "Super Elizabeth Sis", 800, 600);
 		fondo 		= new Fondo();
 		princesa 	= new Princesa();
 		bolaFuego	= new BolaFuego();
-//		musicaJuego = Herramientas.cargarSonido("musica/CC.wav");
+		fondoGO = new Fondo();
+		
+		musicaGO = Herramientas.cargarSonido("musica/Game Over.wav");
+		musicaJuego = Herramientas.cargarSonido("musica/musicaJuego.wav");
+		
 		obstaculos	= Obstaculo.inicializar();
 		soldados	= Soldado.inicializar();
+		
 		puntos		= 0;
 		vidas		= 3;
 		this.entorno.iniciar();
 	}
 //	-----------------------------------------------------------------------------------
-	@SuppressWarnings("unused")
+	//@SuppressWarnings("unused")
 	public void tick() {
 		if (vidas > 0) {
 			fondo		.dibujar(entorno);
-//			musicaJuego	.start();
+			musicaJuego	.start();
 			princesa		.dibujarContorno(entorno);				// borrar cuando no se use
 			princesa		.dibujar(entorno);
 			bolaFuego	.dibujarContorno(entorno);
@@ -63,9 +72,7 @@ public class Juego extends InterfaceJuego {
 				princesa.setVulnerable(false);
 				vidas--;
 			}
-			if (vidas == 0) {
-//				musicaJuego.close();
-			}
+
 			if (!princesa.siChoca(obstaculos, soldados)){
 				princesa.setVulnerable(true);
 			}
@@ -97,19 +104,11 @@ public class Juego extends InterfaceJuego {
 	}
 	
 	public void mostrarGameOver() {
-		entorno.cambiarFont("Comic Sans MS", 60, Color.darkGray);
-		entorno.escribirTexto("Game Over :'(", 203, 303);
-		entorno.cambiarFont("Comic Sans MS", 60, Color.RED);
-		entorno.escribirTexto("Game Over :'(", 200, 300);
-	}
-	
-	@SuppressWarnings("unused") //Si no pongo esto se rompe todo
-	public void fin() {
-		//Termina musica del juego
-		if (vidas==0) {
-//			musicaJuego.close(); 
-			GameOver go = new GameOver();
-		}
+		musicaJuego.close();
+		
+		musicaGO.start();
+		fondo.dibujarGO(entorno);
+		fondo.dibujarNombreGO(entorno);
 	}
 //	-----------------------------------------------------------------------------------
 
