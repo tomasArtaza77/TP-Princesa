@@ -17,20 +17,19 @@ public class Juego extends InterfaceJuego {
 	private Obstaculo[] obstaculos;
 	private Soldado[] 	soldados;
 	private Fondo 		fondo;
-
-	Fondo fondoGO;
+	
 	Clip musicaGO;
+	Clip musicaJuego;
 	
 	private int 		puntos;
 	private int 		vidas;
-	Clip musicaJuego;
+	
 //	-----------------------------------------------------------------------------------
 	public Juego() {
 		this.entorno = new Entorno(this, "Super Elizabeth Sis", 800, 600);
 		fondo 		= new Fondo();
 		princesa 	= new Princesa();
 		bolaFuego	= new BolaFuego();
-		fondoGO = new Fondo();
 		
 		musicaGO = Herramientas.cargarSonido("musica/Game Over.wav");
 		musicaJuego = Herramientas.cargarSonido("musica/musicaJuego.wav");
@@ -48,20 +47,20 @@ public class Juego extends InterfaceJuego {
 		if (vidas > 0) {
 			fondo		.dibujar(entorno);
 			musicaJuego	.start();
-			princesa		.dibujarContorno(entorno);				// borrar cuando no se use
+//			princesa		.dibujarContorno(entorno);				// borrar cuando no se use
 			princesa		.dibujar(entorno);
 			bolaFuego	.dibujarContorno(entorno);
-//			Soldado		.dibujar(entorno, soldados);	faltan las imagenes
-//			Obstaculo	.dibujar(entorno, obstaculos);	faltan las imagenes
-			Obstaculo	.dibujarContorno(entorno, obstaculos);	// borrar
-			Soldado		.dibujarContorno(entorno, soldados);	// borrar
+			Soldado		.dibujarSoldado(entorno, soldados);
+			Obstaculo	.dibujarObstaculo(entorno, obstaculos);	
+//			Obstaculo	.dibujarContorno(entorno, obstaculos);	// borrar
+//			Soldado		.dibujarContorno(entorno, soldados);	// borrar
 			Obstaculo	.mover(obstaculos);
 			Soldado		.mover(soldados);
 			mostrarPuntos();
 			mostrarVidas();
 		
 			princesa.saltar(entorno);
-		
+			
 			if (entorno.estaPresionada(entorno.TECLA_DERECHA)) {
 				princesa.avanzar();	
 			}
@@ -104,10 +103,9 @@ public class Juego extends InterfaceJuego {
 	
 	public void mostrarGameOver() {
 		musicaJuego.close();
-	
+		
 		musicaGO.start();
 		fondo.dibujarGO(entorno);
-		fondo.dibujarNombreGO(entorno);
 	}
 //	-----------------------------------------------------------------------------------
 

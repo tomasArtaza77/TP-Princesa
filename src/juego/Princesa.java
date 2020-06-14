@@ -7,7 +7,7 @@ import entorno.Herramientas;
 public class Princesa {
 	private double x;
 	private double y;
-	private double diametro;
+	//private double diametro;
 	private double angulo;
 	private Image imagen;
 	private boolean salto;
@@ -17,7 +17,7 @@ public class Princesa {
 	Princesa() {
 		this.x = 200;
 		this.y = 510;
-		this.diametro = 50;
+		//this.diametro = 50;
 		this.angulo = 2 * Math.PI;
 		this.imagen = Herramientas.cargarImagen("imagenes/pika.gif");
 		this.salto = false;		// cambia a true cuando se presiona arriba y a false cuando "toca" el suelo
@@ -25,10 +25,11 @@ public class Princesa {
 		this.vulnerable = true;
 	}
 	
+	/*
 	void dibujarContorno(Entorno entorno) {		// BORRAR CUANDO NO SE NECESITE
 		entorno.dibujarCirculo(this.x, this.y, this.diametro, Color.yellow);
 	}
-	
+	*/
 	void dibujar(Entorno entorno) {
 		entorno.dibujarImagen(this.imagen, this.x, this.y, this.angulo, 0.2);
 	}

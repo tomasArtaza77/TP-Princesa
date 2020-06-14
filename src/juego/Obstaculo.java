@@ -2,21 +2,23 @@ package juego;
 
 import java.awt.*;
 import entorno.Entorno;
-//import entorno.Herramientas;
+import entorno.Herramientas;
 
 public class Obstaculo {
 	private double x;
 	private double y;
 	private double ancho;
 	private double alto;
-//	private Image imagen;
+	private double angulo;
+	private Image imagen;
 	
 	Obstaculo(int x, int y, int ancho, int alto /* imagen */) {
 		this.x 		= x;
 		this.y 		= y;
 		this.ancho 	= ancho;
 		this.alto 	= alto;
-//		this.imagen = Herramientas.cargarImagen(" nombre de la imagen.img ");
+		this.angulo   = 0;
+		this.imagen = Herramientas.cargarImagen("imagenes/obstaculo.png");
 	}
 
 	public static Obstaculo[] inicializar() {
@@ -26,18 +28,18 @@ public class Obstaculo {
 		obstaculos[2] = new Obstaculo(850, 500, 40, 90);
 		return obstaculos;
 	}
-	
+	/*
 	public static void dibujarContorno(Entorno entorno, Obstaculo[] obstaculos) {
 		for (int i = 0; i < obstaculos.length; i++) {
 			entorno.dibujarRectangulo(obstaculos[i].x, obstaculos[i].y, obstaculos[i].ancho, obstaculos[i].alto, 0, Color.cyan);
 		}
 	}
-	
-//	public static void dibujar(Entorno entorno, Obstaculo[] obs) {
-//		for (int i = 0; i < obs.length; i++) {
-//			entorno.dibujarImagen(obs[i].imagen, obs[i].x, obs[i].y, 0);
-//		}
-//	}
+	*/
+	public static void dibujarObstaculo(Entorno entorno, Obstaculo[] obs) {
+		for (int i = 0; i < obs.length; i++) {
+			entorno.dibujarImagen(obs[i].imagen, obs[i].x, obs[i].y, obs[i].angulo, 0.4);
+		}
+	}
 	
 	public static void mover(Obstaculo[] obstaculos) {
 		for (int i = 0; i < obstaculos.length; i++) {

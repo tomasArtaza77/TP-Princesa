@@ -1,18 +1,18 @@
 package juego;
 
-import java.awt.Color;
-//import java.awt.*;
+import java.awt.*;
+import entorno.Herramientas;
 import entorno.Entorno;
 //import java.util.Random;
-//import entorno.Herramientas;
 
 public class Soldado {
 	private double x;
 	private double y;
 	private double diametro;
 	private boolean quemado;
-//	private double angulo;
-//	private Image imagen;
+	private Image imagen;
+	private double angulo;
+
 	
 	
 	Soldado(double x, double y, double diametro /* imagen */) {
@@ -20,8 +20,8 @@ public class Soldado {
 		this.y 		  = y;
 		this.diametro = diametro;
 		this.quemado  = false;
-//		this.angulo   = 0;
-//		this.imagen = Herramientas.cargarImagen(" nombre de la imagen.img ");
+		this.angulo   = 0;
+		this.imagen = Herramientas.cargarImagen("imagenes/enemigo 1.gif");
 	}
 
 	public static Soldado[] inicializar() {
@@ -31,18 +31,18 @@ public class Soldado {
 		soldados[2] = new Soldado(900, 515, 45);
 		return soldados;
 	}
-	
+	/*
 	public static void dibujarContorno(Entorno entorno, Soldado[] soldados) {		// BORRAR CUANDO NO SE NECESITE
 		for (int i = 0; i < soldados.length; i++) {
 			entorno.dibujarCirculo(soldados[i].x, soldados[i].y, soldados[i].diametro, Color.red);
 		}
 	}
-
-//	public static void dibujar(Entorno entorno, Soldado[] soldados) {
-//		for (int i = 0; i < soldados.length; i++) {
-//			entorno.dibujarImagen(soldados[i].imagen, soldados[i].x, soldados[i].y, soldados[i].angulo);
-//		}
-//	}
+	*/
+	public static void dibujarSoldado(Entorno entorno, Soldado[] soldados) {
+		for (int i = 0; i < soldados.length; i++) {
+			entorno.dibujarImagen(soldados[i].imagen, soldados[i].x, soldados[i].y, soldados[i].angulo, 0.3);
+		}
+	}
 	
 	public static void mover(Soldado[] soldados) {
 		for (int i = 0; i < soldados.length; i++) {
