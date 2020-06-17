@@ -1,81 +1,106 @@
 package juego;
 
-import java.awt.*;
+import java.awt.Image;
+
+//import javax.sound.sampled.Clip;
+
 import entorno.Entorno;
 import entorno.Herramientas;
-// PONER this. A TODAS LAS VARIABLES DE INSTANCIA
+
 public class Princesa {
 	private double x;
 	private double y;
-	//private double diametro;
-	private double angulo;
-	private Image imagen;
+	private double diam;
+	private double ang;
+	private Image img;
+	private Image img2;
+	private Image img3;
+	private Image img4;
 	private boolean salto;
 	private double inercia;
 	private boolean vulnerable;
 	
+	//private Clip saltar;
+	
+	
 	Princesa() {
 		this.x = 200;
 		this.y = 510;
-		//this.diametro = 50;
-		this.angulo = 2 * Math.PI;
-		this.imagen = Herramientas.cargarImagen("imagenes/pika.gif");
-		this.salto = false;		// cambia a true cuando se presiona arriba y a false cuando "toca" el suelo
-		this.inercia = 0.0;		// la velocidad de ascenso y descenso
+		this.diam = 50;
+		this.ang = 2 * Math.PI;
+		this.img = Herramientas.cargarImagen("imagenes/pika.gif");
+		this.img2 = Herramientas.cargarImagen("imagenes/pikaGano.gif");
+		this.img3 = Herramientas.cargarImagen("imagenes/gato1.gif");
+		this.img4 = Herramientas.cargarImagen("imagenes/pikaPerdio.gif");
+		//saltar       = Herramientas.cargarSonido("musica/salto.wav");
+		
+		this.salto = false;
+		this.inercia = 0.0;
 		this.vulnerable = true;
 	}
 	
-	/*
-	void dibujarContorno(Entorno entorno) {		// BORRAR CUANDO NO SE NECESITE
-		entorno.dibujarCirculo(this.x, this.y, this.diametro, Color.yellow);
-	}
-	*/
-	void dibujar(Entorno entorno) {
-		entorno.dibujarImagen(this.imagen, this.x, this.y, this.angulo, 0.2);
+	void dibujarPersonaje(Entorno entorno) {
+		entorno.dibujarImagen(this.img, this.x, this.y, this.ang, 0.2);
 	}
 	
-	boolean siChoca(Obstaculo[] obstaculos, Soldado[] soldados) {	// faltan las colisiones con los soldados
+	void dibujarGano(Entorno entorno) { //dibuja el pikachu cuando ganas
+		entorno.dibujarImagen(this.img2, entorno.ancho()/2, 510, this.ang, 0.3);
+	}
+	
+	void dibujarPerdio(Entorno entorno) { //dibuja el pikachu cuando ganas
+		entorno.dibujarImagen(this.img4, entorno.ancho()/2+100, 475, this.ang, 0.125);
+	}
+	
+	void dibujarGato(Entorno entorno) {
+		entorno.dibujarImagen(this.img3, entorno.ancho()/2+80, 510, this.ang, 0.125);
+	}
+	
+	boolean siChoca(Obstaculo[] obstaculos, Soldado[] soldados) {
 		if (tocaObstaculo(obstaculos) || tocaSoldado(soldados)) {
 			return true;
 		}
 		return false;
 	}
 	
-	private boolean tocaObstaculo(Obstaculo[] obstaculos) {
-		for (int i = 0; i < obstaculos.length; i++) {
-			if (	this.x > obstaculos[i].getX() - obstaculos[i].getAncho()/2 &&
-					this.x < obstaculos[i].getX() + obstaculos[i].getAncho()/2 &&
-					this.y > obstaculos[i].getY() - obstaculos[i].getAlto()/2  &&
-					this.y < obstaculos[i].getY() + obstaculos[i].getAlto()/2) {
+	private boolean tocaObstaculo(Obstaculo[] obs) {
+		for (int i = 0; i < obs.length; i++) {
+			if (	this.x + this.diam/4  >  obs[i].getX() - obs[i].getAncho()/2 &&	// /4 para que no sea tan "celoso" el contacto
+					this.x - this.diam/4  <  obs[i].getX() + obs[i].getAncho()/2 &&
+					this.y + this.diam/4  >  obs[i].getY() - obs[i].getAlto()/2  &&
+					this.y - this.diam/4  <  obs[i].getY() + obs[i].getAlto()/2) {
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	private boolean tocaSoldado(Soldado[] soldados) {
-		for (int i = 0; i < soldados.length; i++) {
-			if (	this.x > soldados[i].getX() - soldados[i].getDiametro()/2 &&
-					this.x < soldados[i].getX() + soldados[i].getDiametro()/2 &&
-					this.y > soldados[i].getY() - soldados[i].getDiametro()/2  &&
-					this.y < soldados[i].getY() + soldados[i].getDiametro()/2) {
+	private boolean tocaSoldado(Soldado[] sold) {
+		for (int i = 0; i < sold.length; i++) {
+			if (this.distancia(sold[i]) < this.diam/2 + sold[i].getDiametro() ) {
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	void saltar(Entorno entorno) {
-		if (entorno.sePresiono(entorno.TECLA_ARRIBA) && !this.salto) {
-			this.inercia = -8;	// setea el empuje hacia arriba
-			this.salto = true;	// esta saltando
+	private double distancia(Soldado s) {	// Pitagoras rudimentario
+		double cat_a = Math.abs(this.x - s.getX());
+		double cat_b = Math.abs(this.y - s.getY());
+		double sum_cat2 = Math.pow(cat_a, 2) + Math.pow(cat_b, 2);
+		double hip = Math.sqrt(sum_cat2);
+		return hip;
+	}
+	
+	public void impulso() {
+		if (!this.salto) {
+			this.inercia = -9;
 		}
 		if (this.salto) {
-			this.y += this.inercia;	// le suma al valor en el eje y la inercia
-			this.inercia += 0.17;	// va achicando la inercia para que el salto se vaya frenando
+			this.y += this.inercia;
+			this.inercia += 0.18;
 		}
 		if (this.y >= 510) {
-			this.salto = false; // cuando llega al nivel del suelo, salto = false
+			this.salto = false;
 		}
 	}
 	
@@ -91,15 +116,25 @@ public class Princesa {
 		}
 	}
 	
-	public boolean saltando() {
-		return salto;
+	public void disparar(Fireball[] fb) {
+		for (int i = 0; i < fb.length; i++) {
+			if (fb[i] == null) {
+				fb[i] = new Fireball(this.x, this.y);
+				return;
+			}
+		}
+	}
+	
+	public void setSalto(boolean salto) {
+		this.salto = salto;
+		
 	}
 
-	public boolean isVulnerable() {	// nombres feos!!
+	public boolean esVulnerable() {
 		return vulnerable;
 	}
 
-	public void setVulnerable(boolean vulnerable) {	// cambiar "getter" y "setter" por otra cosa
+	public void setVulnerable(boolean vulnerable) {
 		this.vulnerable = vulnerable;
 	}
 
@@ -110,12 +145,5 @@ public class Princesa {
 	public double getY() {
 		return y;
 	}
-	
-	
-	
-	
-	
-	
-	
 	
 }

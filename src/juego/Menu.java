@@ -5,7 +5,7 @@ import entorno.Entorno;
 import entorno.Herramientas;
 import entorno.InterfaceJuego;
 import javax.sound.sampled.Clip;
-
+/*-*/
 public class Menu extends InterfaceJuego {
 	private Entorno app;
 	Fondo fondo;
