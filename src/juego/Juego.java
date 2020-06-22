@@ -108,14 +108,14 @@ public class Juego extends InterfaceJuego {
 			if (vidas == 0) {
 				terminado = true;
 			}
-			if (puntos >= 15) {
+			if (puntos >= 5) {
 				terminado = true;
 			}
 		}
 		if (terminado && vidas == 0) {
 			mostrarGameOver();
 		}
-		if (terminado && puntos >= 15) {
+		if (terminado && puntos >= 5) {
 			mostrarVictoria();
 		}
 	}
@@ -149,6 +149,7 @@ public class Juego extends InterfaceJuego {
 		
 		if(entorno.sePresiono(entorno.TECLA_ENTER)) {
 			musicaGO.close();
+			entorno.removeNotify();
 			j = new Juego();
 		}
 	}
@@ -160,9 +161,17 @@ public class Juego extends InterfaceJuego {
 		princesa.dibujarGato(entorno);
 		entorno.cambiarFont("Comic Sans MS", 26, Color.MAGENTA);
 		entorno.escribirTexto("Final Score: " + puntos, 500, 400);
+		
+		entorno.cambiarFont("Arial", 30, Color.white);
+        entorno.escribirTexto("Press ENTER  to play",10,500 );
+		
+		if(entorno.sePresiono(entorno.TECLA_ENTER)) {
+			musicaGO.close();
+			entorno.removeNotify();
+			j = new Juego();
+		}
 		// TODO cuando puntos >= 100, rescata al gato
 	}
 //	-----------------------------------------------------------------------------------
-
 
 }

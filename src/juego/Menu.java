@@ -34,6 +34,7 @@ public class Menu extends InterfaceJuego {
 		if (app.sePresiono(app.TECLA_ESPACIO)) {
 			//no para la musica.EL stop NO SIRVE
 			musicaMenu.close();
+			app.removeNotify();
 			Juego juego = new Juego();
 			
 		}

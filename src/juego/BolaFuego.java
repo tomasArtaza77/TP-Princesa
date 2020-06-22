@@ -1,3 +1,4 @@
+
 package juego;
 
 import java.awt.Color;
@@ -12,7 +13,7 @@ public class BolaFuego {
 	private double diametro;
 	private double angulo;
 	private Image imagen;
-	
+
 	BolaFuego() {
 		disparada = false;
 		this.x 		  = 200;	// provisorio
@@ -34,7 +35,7 @@ public class BolaFuego {
 		if (this.disparada) {
 			for (int i = 0; i < soldados.length; i++) {
 				if (tocaSold(soldados[i])) {
-					soldados[i].setQuemado(true);
+					//soldados[i].setQuemado(true);
 					this.disparada = false;
 					return true;
 				}
