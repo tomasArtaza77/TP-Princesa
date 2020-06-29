@@ -4,7 +4,7 @@ import entorno.Entorno;
 import entorno.Herramientas;
 import entorno.InterfaceJuego;
 import javax.sound.sampled.Clip;
-	
+/**/	
 public class Juego extends InterfaceJuego {
 	private Entorno		entorno;
 	private PrincesaPikachu princesaPika;
@@ -20,6 +20,7 @@ public class Juego extends InterfaceJuego {
 	private boolean		gano;
 	private boolean		perdio;
 	private Clip 		musicaGO;
+	private Clip 		musicaGano;
 	private Clip 		musicaJuego;
 	
 	public Juego() {
@@ -27,7 +28,8 @@ public class Juego extends InterfaceJuego {
 		fondo 		  = new Fondo();
 		princesaPika  = new PrincesaPikachu();
 		fireballs	  = new Fireball[10];
-		musicaGO	  = Herramientas.cargarSonido("musica/perdio.wav");
+		musicaGO	  = Herramientas.cargarSonido("musica/Game Over.wav");
+		musicaGano	  = Herramientas.cargarSonido("musica/gano.wav");
 		musicaJuego   = Herramientas.cargarSonido("musica/musicaJuego.wav");
 		escenario	  = Escenario.inicializarEscenario();
 		obstaculos	  = Obstaculo.inicializar();
@@ -102,7 +104,7 @@ public class Juego extends InterfaceJuego {
 			}
 		}
 		if (gano) {
-			Fondo.mostrarVictoria(entorno, fondo, princesaPika, musicaJuego, musicaGO, puntos, j);
+			Fondo.mostrarVictoria(entorno, fondo, princesaPika, musicaJuego, musicaGano, puntos, j);
 		}
 		if (perdio) {
 			Fondo.mostrarGameOver(entorno, fondo, princesaPika, musicaJuego, musicaGO, j);
