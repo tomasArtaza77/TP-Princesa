@@ -20,6 +20,7 @@ public class Juego extends InterfaceJuego {
 	private boolean		gano;
 	private boolean		perdio;
 	private Clip 		musicaGO;
+	private Clip 		musicaGano;
 	private Clip 		musicaJuego;
 	private Clip toca;
 	
@@ -101,7 +102,7 @@ public class Juego extends InterfaceJuego {
 				perdio = true;
 				empezo = false;
 			}
-			if (puntos >= 15) {
+			if (puntos >= 5) {
 				gano = true;
 				empezo = false;
 			}
