@@ -18,6 +18,7 @@ public class PrincesaPikachu {
 	private Image img4;
 	private boolean salto;
 	private boolean vulnerable;
+	private Clip saltar;
 	
 	PrincesaPikachu() {
 		this.x = 200;
@@ -118,6 +119,9 @@ public class PrincesaPikachu {
 	
 	public void setSalto(boolean salto) {
 		this.salto = salto;	
+		saltar=null;
+		saltar=Herramientas.cargarSonido("musica/salto.wav");
+		saltar.start();
 	}
 
 	public boolean esVulnerable() {

@@ -20,8 +20,8 @@ public class Juego extends InterfaceJuego {
 	private boolean		gano;
 	private boolean		perdio;
 	private Clip 		musicaGO;
-	private Clip 		musicaGano;
 	private Clip 		musicaJuego;
+	private Clip toca;
 	
 	public Juego() {
 		entorno  	  = new Entorno(this, "Super Elizabeth Sis", 800, 600);
@@ -76,6 +76,9 @@ public class Juego extends InterfaceJuego {
 			if (princesaPika.siChoca(obstaculos, soldados) && princesaPika.esVulnerable()) {
 				princesaPika.setVulnerable(false);
 				vidas--;
+				toca=null;
+				toca=Herramientas.cargarSonido("musica/tocaObstaculo.wav");
+				toca.start();
 			}
 			if (!princesaPika.siChoca(obstaculos, soldados)){
 				princesaPika.setVulnerable(true);
