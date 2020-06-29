@@ -8,8 +8,8 @@ import javax.sound.sampled.Clip;
 
 public class GameOver extends InterfaceJuego {
 	private Entorno go;
-	Fondo fondo;
-	Clip musicaGO;
+	private Fondo fondo;
+	private Clip musicaGO;
 	
 	GameOver() {
 		go = new Entorno(this, "Game Over", 800, 600);

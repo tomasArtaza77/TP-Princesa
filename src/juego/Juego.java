@@ -1,177 +1,112 @@
 package juego;
 
-import java.awt.Color;
 import entorno.Entorno;
 import entorno.Herramientas;
 import entorno.InterfaceJuego;
 import javax.sound.sampled.Clip;
-// CAMBIAR NOMBRES A GETTERS PORQUE QUEDAN FEOS
-// ACORTAR NOMBRES LARGOS DE VARIABLES (OBSTACULOS = OBS)
-// a private los metodos auxiliares
-public class Juego extends InterfaceJuego {
-	private Entorno 	entorno;
-	private Princesa 	princesa;
-	Juego j;
 	
+public class Juego extends InterfaceJuego {
+	private Entorno		entorno;
+	private PrincesaPikachu princesaPika;
+	private Juego 		j;
 	private Fireball[]	fireballs;
 	private Obstaculo[] obstaculos;
 	private Soldado[] 	soldados;
 	private Fondo 		fondo;
-//	private Suelo[]		suelo;
-	private moverFondo[] movFondo;
+	private Escenario[] escenario;
 	private int 		puntos;
 	private int 		vidas;
-	private boolean		terminado;
+	private boolean		empezo;
+	private boolean		gano;
+	private boolean		perdio;
 	private Clip 		musicaGO;
 	private Clip 		musicaJuego;
-	//private Clip 		saltar;
 	
-//	-----------------------------------------------------------------------------------
 	public Juego() {
-		this.entorno  = new Entorno(this, "Super Elizabeth Sis", 800, 600);
+		entorno  	  = new Entorno(this, "Super Elizabeth Sis", 800, 600);
 		fondo 		  = new Fondo();
-		princesa 	  = new Princesa();
-		fireballs	  = new Fireball[10];				// se crea cuando la princesa dispara
-		
+		princesaPika  = new PrincesaPikachu();
+		fireballs	  = new Fireball[10];
 		musicaGO	  = Herramientas.cargarSonido("musica/Game Over.wav");
 		musicaJuego   = Herramientas.cargarSonido("musica/musicaJuego.wav");
-		//saltar       = Herramientas.cargarSonido("musica/salto.wav");
-		
-		//suelo		  = Suelo.inicializar();
-		movFondo	  = moverFondo.inicializar();
+		escenario	  = Escenario.inicializarEscenario();
 		obstaculos	  = Obstaculo.inicializar();
 		soldados	  = Soldado.inicializar();
 		puntos		  = 0;
 		vidas		  = 3;
-		terminado	  = false;
-		
-		this.entorno.iniciar();
+		empezo		  = true;
+		gano		  = false;
+		perdio		  = false;
+		entorno.iniciar();
 	}
-//	-----------------------------------------------------------------------------------
+	 
 	public void tick() {
-		if (!terminado) {
-			fondo		.dibujar(entorno);
-			//Suelo		.dibujar(entorno, suelo);
-			//Suelo		.mover(suelo);
-			moverFondo  .dibujar(entorno, movFondo);
-			moverFondo  .mover(movFondo);
-			
+		if (empezo) {
 			musicaJuego	.start();
-			princesa	.dibujarPersonaje(entorno);
-			princesa	.impulso();
+			fondo		.dibujarFondoGano(entorno);
+			Escenario 	.dibujarPaisaje(entorno, escenario);
+			Escenario 	.moverPaisaje(escenario);
+			Escenario	.dibujarSuelo(entorno, escenario);
+			Escenario	.moverSuelo(escenario);
+			princesaPika.dibujarPersonaje(entorno);
+			princesaPika.impulso();
 			Obstaculo	.dibujar(entorno, obstaculos);
 			Obstaculo	.mover(obstaculos);
 			Soldado		.dibujar(entorno, soldados);
 			Soldado		.mover(soldados);
-			Soldado		.spam(soldados);
+			Soldado		.reaparece(soldados);
+			Soldado		.soldadoChocaObstaculo(soldados, obstaculos);
 			Fireball	.dibujar(entorno, fireballs);
 			Fireball	.mover(fireballs);
-			mostrarPuntos();
-			mostrarVidas();
+			Fondo		.mostrarPuntos(entorno, puntos);
+			Fondo		.mostrarVidas(entorno, vidas);
 		
 			if (entorno.sePresiono(entorno.TECLA_ARRIBA)) {
-				//saltar.start();
-				princesa.setSalto(true);
+				princesaPika.setSalto(true);
 				
 			}
 			if (entorno.estaPresionada(entorno.TECLA_DERECHA)) {
-				princesa.avanzar();	
+				princesaPika.avanzar();	
 			}
 			if (entorno.estaPresionada(entorno.TECLA_IZQUIERDA)) {
-				princesa.retroceder();
+				princesaPika.retroceder();
 			}
-			if (princesa.siChoca(obstaculos, soldados) && princesa.esVulnerable()) {
-				princesa.setVulnerable(false);
+			if (princesaPika.siChoca(obstaculos, soldados) && princesaPika.esVulnerable()) {
+				princesaPika.setVulnerable(false);
 				vidas--;
 			}
-			if (!princesa.siChoca(obstaculos, soldados)){
-				princesa.setVulnerable(true);
+			if (!princesaPika.siChoca(obstaculos, soldados)){
+				princesaPika.setVulnerable(true);
 			}
 			if (entorno.sePresiono(entorno.TECLA_ESPACIO)) {
-				princesa.disparar(fireballs);
+				princesaPika.disparar(fireballs);
 				
 			}
 			for (int i = 0; i < fireballs.length; i++) {
-				if (fireballs[i] != null) {
-					if (fireballs[i].tocaSoldado(soldados)) {
-						puntos += 5;
-						fireballs[i] = null;
-					}
+				if (fireballs[i] != null && fireballs[i].tocaSoldado(soldados)) {
+					puntos += 5;
+					fireballs[i] = null;
 				}
-				if (fireballs[i] != null) {
-					if (fireballs[i].tocaObstaculo(obstaculos) || fireballs[i].getX() > 800) {
-						fireballs[i] = null;
-					}
+				if (	fireballs[i] != null &&
+						(fireballs[i].tocaObstaculo(obstaculos) || fireballs[i].getX() > 800) ) {
+					fireballs[i] = null;
 				}
 			}
-			
 			if (vidas == 0) {
-				terminado = true;
+				perdio = true;
+				empezo = false;
 			}
-			if (puntos >= 5) {
-				terminado = true;
+			if (puntos >= 15) {
+				gano = true;
+				empezo = false;
 			}
 		}
-		if (terminado && vidas == 0) {
-			mostrarGameOver();
+		if (gano) {
+			Fondo.mostrarVictoria(entorno, fondo, princesaPika, musicaJuego, musicaGO, puntos, j);
 		}
-		if (terminado && puntos >= 5) {
-			mostrarVictoria();
-		}
-	}
-	//	-----------------------------------------------------------------------------------
-	public void mostrarPuntos() {
-		entorno.cambiarFont("Comic Sans MS", 40, Color.RED);	// demasiadas lineas
-		entorno.escribirTexto("Points: " + puntos, 600, 100);	// se podrian meter en un metodo
-		
-	
-		
-		//----------------MUESTRO LOS PTS PARA GANAR AHORA----------------//
-		entorno.cambiarFont("Comic Sans MS", 20, Color.ORANGE);	// demasiadas lineas
-		entorno.escribirTexto("15pts para ganar/si perdes sale otra ventana", 100, 300);	// se podrian meter en un metodo
-	}
-	
-	
-	
-	public void mostrarVidas() {
-		entorno.cambiarFont("Comic Sans MS", 40, Color.GREEN);
-		entorno.escribirTexto("Lifes: " + vidas, 30, 100);
-	}
-	
-	
-	public void mostrarGameOver() {
-		musicaJuego.close();
-		musicaGO.start();
-		fondo.dibujarGO(entorno);
-		princesa.dibujarPerdio(entorno); 
-		entorno.cambiarFont("Arial", 30, Color.white);
-        entorno.escribirTexto("Press ENTER  to play",10,500 );
-		
-		if(entorno.sePresiono(entorno.TECLA_ENTER)) {
-			musicaGO.close();
-			entorno.removeNotify();
-			j = new Juego();
+		if (perdio) {
+			Fondo.mostrarGameOver(entorno, fondo, princesaPika, musicaJuego, musicaGO, j);
 		}
 	}
-	private void mostrarVictoria() {
-		musicaJuego.close();
-		fondo.dibujar(entorno);
-		fondo.dibujarNombreGanaste(entorno);
-		princesa.dibujarGano(entorno);
-		princesa.dibujarGato(entorno);
-		entorno.cambiarFont("Comic Sans MS", 26, Color.MAGENTA);
-		entorno.escribirTexto("Final Score: " + puntos, 500, 400);
 		
-		entorno.cambiarFont("Arial", 30, Color.white);
-        entorno.escribirTexto("Press ENTER  to play",10,500 );
-		
-		if(entorno.sePresiono(entorno.TECLA_ENTER)) {
-			musicaGO.close();
-			entorno.removeNotify();
-			j = new Juego();
-		}
-		// TODO cuando puntos >= 100, rescata al gato
-	}
-//	-----------------------------------------------------------------------------------
-
 }
