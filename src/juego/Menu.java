@@ -10,11 +10,13 @@ import javax.sound.sampled.Clip;
 public class Menu extends InterfaceJuego {
 	private Entorno app;
 	private Fondo fondo;
+//	private Fondo nombre;
 	private Clip musicaMenu;
 	
 	Menu() {
 		app = new Entorno(this, "Super Elizabeth Sis", 800, 600);
 		fondo = new Fondo();
+//		nombre = new Fondo();
 		musicaMenu = Herramientas.cargarSonido("musica/musicaM.wav");
 		app.iniciar();
 	}
