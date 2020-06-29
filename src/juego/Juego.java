@@ -27,7 +27,7 @@ public class Juego extends InterfaceJuego {
 		fondo 		  = new Fondo();
 		princesaPika  = new PrincesaPikachu();
 		fireballs	  = new Fireball[10];
-		musicaGO	  = Herramientas.cargarSonido("musica/Game Over.wav");
+		musicaGO	  = Herramientas.cargarSonido("musica/perdio.wav");
 		musicaJuego   = Herramientas.cargarSonido("musica/musicaJuego.wav");
 		escenario	  = Escenario.inicializarEscenario();
 		obstaculos	  = Obstaculo.inicializar();
